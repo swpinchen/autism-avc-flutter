@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/unsplash_service.dart';
 import 'package:autism_avc_flutter/l10n/app_localizations.dart';
+
+/// Quick-search keyword tags matching the Rails _unsplash.html.erb partial.
+const _kSearchTags = ['School', 'Park', 'Play', 'Clinic', 'Sleep'];
 
 /// Full-screen picker that searches Unsplash and returns the local file path
 /// of the downloaded+saved image, or null if cancelled.
@@ -27,25 +31,39 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
     super.dispose();
   }
 
-  Future<void> _search() async {
-    final query = _searchController.text.trim();
+  Future<void> _search([String? keyword]) async {
+    final query = keyword ?? _searchController.text.trim();
     if (query.isEmpty) return;
+
+    // Update the text field to reflect the active search
+    if (keyword != null) {
+      _searchController.text = keyword;
+    }
 
     setState(() {
       _loading = true;
       _error = null;
     });
 
-    final unsplash = ref.read(unsplashServiceProvider);
-    final results = await unsplash.search(query);
+    try {
+      final unsplash = ref.read(unsplashServiceProvider);
+      final results = await unsplash.search(query);
 
-    setState(() {
-      _results = results;
-      _loading = false;
-      if (results.isEmpty && mounted) {
-        _error = AppLocalizations.of(context)!.noResults;
-      }
-    });
+      if (!mounted) return;
+      setState(() {
+        _results = results;
+        _loading = false;
+        if (results.isEmpty) {
+          _error = AppLocalizations.of(context)!.noResults;
+        }
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _error = e.toString();
+      });
+    }
   }
 
   Future<void> _selectPhoto(UnsplashPhoto photo) async {
@@ -57,9 +75,10 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
     // Download the regular-size image
     final bytes = await unsplash.downloadImage(photo.regularUrl);
     if (bytes == null) {
+      if (!mounted) return;
       setState(() {
         _loading = false;
-        if (mounted) _error = AppLocalizations.of(context)!.downloadFailed;
+        _error = AppLocalizations.of(context)!.downloadFailed;
       });
       return;
     }
@@ -86,14 +105,15 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
         children: [
           // Search bar
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: l10n.searchPhotosHint,
+                prefixIcon: const Icon(Icons.search),
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
+                  icon: const Icon(Icons.send),
                   onPressed: _search,
                 ),
               ),
@@ -102,16 +122,46 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
             ),
           ),
 
-          // Loading / Error
+          // Quick-search keyword tags (matches Rails _unsplash.html.erb)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: _kSearchTags.map((tag) {
+                return ActionChip(
+                  label: Text(tag),
+                  onPressed: () => _search(tag),
+                );
+              }).toList(),
+            ),
+          ),
+
+          const Divider(height: 1),
+
+          // Loading / Error / Results
           if (_loading)
-            const Padding(
-              padding: EdgeInsets.all(24),
-              child: CircularProgressIndicator(),
+            const Expanded(
+              child: Center(child: CircularProgressIndicator()),
             )
           else if (_error != null)
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Text(_error!, style: Theme.of(context).textTheme.bodyLarge),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    _error!,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            )
+          else if (_results.isEmpty)
+            const Expanded(
+              child: Center(
+                child: Icon(Icons.image_search, size: 64, color: Colors.grey),
+              ),
             )
           else
             // Results grid
@@ -176,6 +226,32 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
                 },
               ),
             ),
+
+          // Unsplash credit footer (matches Rails #credit-footer)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Photos from ',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                GestureDetector(
+                  onTap: () => launchUrl(Uri.parse('https://unsplash.com')),
+                  child: Text(
+                    'Unsplash',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
