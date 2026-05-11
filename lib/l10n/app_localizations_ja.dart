@@ -261,4 +261,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get onboardingPhotoDesc => 'カメラ、ギャラリー、またはUnsplashから写真を添付できます。';
+
+  @override
+  String get month => '月';
+
+  @override
+  String get week => '週';
+
+  @override
+  String get day => '日';
+
+  @override
+  String get allDay => '終日';
+
+  @override
+  String get noTime => '時間未設定';
 }

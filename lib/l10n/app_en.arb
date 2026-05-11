@@ -101,5 +101,11 @@
   "onboardingReviewTitle": "Review How You Feel",
   "onboardingReviewDesc": "After an event, rate how it went. If you're feeling down, we'll remind you of something to look forward to.",
   "onboardingPhotoTitle": "Add Photos",
-  "onboardingPhotoDesc": "Attach photos from your camera, gallery, or search Unsplash for the perfect image."
+  "onboardingPhotoDesc": "Attach photos from your camera, gallery, or search Unsplash for the perfect image.",
+
+  "month": "Month",
+  "week": "Week",
+  "day": "Day",
+  "allDay": "All day",
+  "noTime": "No time set"
 }

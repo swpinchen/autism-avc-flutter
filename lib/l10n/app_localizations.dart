@@ -595,6 +595,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attach photos from your camera, gallery, or search Unsplash for the perfect image.'**
   String get onboardingPhotoDesc;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get day;
+
+  /// No description provided for @allDay.
+  ///
+  /// In en, this message translates to:
+  /// **'All day'**
+  String get allDay;
+
+  /// No description provided for @noTime.
+  ///
+  /// In en, this message translates to:
+  /// **'No time set'**
+  String get noTime;
 }
 
 class _AppLocalizationsDelegate

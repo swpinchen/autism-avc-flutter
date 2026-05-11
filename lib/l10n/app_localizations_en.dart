@@ -266,4 +266,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboardingPhotoDesc =>
       'Attach photos from your camera, gallery, or search Unsplash for the perfect image.';
+
+  @override
+  String get month => 'Month';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get day => 'Day';
+
+  @override
+  String get allDay => 'All day';
+
+  @override
+  String get noTime => 'No time set';
 }

@@ -101,5 +101,11 @@
   "onboardingReviewTitle": "気持ちをレビュー",
   "onboardingReviewDesc": "イベントの後、どうだったか評価しましょう。気分が落ちているときは、楽しみなことを思い出させます。",
   "onboardingPhotoTitle": "写真を追加",
-  "onboardingPhotoDesc": "カメラ、ギャラリー、またはUnsplashから写真を添付できます。"
+  "onboardingPhotoDesc": "カメラ、ギャラリー、またはUnsplashから写真を添付できます。",
+
+  "month": "月",
+  "week": "週",
+  "day": "日",
+  "allDay": "終日",
+  "noTime": "時間未設定"
 }
