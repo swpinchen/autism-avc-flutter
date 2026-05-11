@@ -153,6 +153,15 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                       height: 150,
                       width: double.infinity,
                       fit: BoxFit.cover,
+                      errorBuilder: (_, e, st) => Container(
+                        height: 150,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.image_not_supported, size: 48),
+                      ),
                     ),
                   ),
                   Positioned(

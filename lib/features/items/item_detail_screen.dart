@@ -112,6 +112,15 @@ class ItemDetailScreen extends ConsumerWidget {
                       width: double.infinity,
                       height: 200,
                       fit: BoxFit.cover,
+                      errorBuilder: (_, e, st) => Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.image_not_supported, size: 48),
+                      ),
                     ),
                   ),
                 const SizedBox(height: 16),

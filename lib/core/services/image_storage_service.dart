@@ -56,16 +56,12 @@ class ImageStorageService {
     final decoded = img.decodeImage(bytes);
     if (decoded == null) return bytes;
 
-    if (decoded.width <= maxWidth && decoded.height <= maxHeight) {
+    if (decoded.width <= maxWidth) {
       return bytes;
     }
 
-    final resized = img.copyResize(
-      decoded,
-      width: maxWidth,
-      height: maxHeight,
-      maintainAspect: true,
-    );
+    // Only constrain width; height scales proportionally
+    final resized = img.copyResize(decoded, width: maxWidth);
 
     return Uint8List.fromList(img.encodeJpg(resized, quality: 85));
   }

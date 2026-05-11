@@ -122,6 +122,8 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                                       child: Image.file(
                                         File(occ.item.imagePath!),
                                         fit: BoxFit.cover,
+                                        errorBuilder: (_, e, st) =>
+                                            const Icon(Icons.image_not_supported, size: 24),
                                       ),
                                     ),
                                   )
