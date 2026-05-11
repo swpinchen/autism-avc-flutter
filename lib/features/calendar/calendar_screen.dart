@@ -71,33 +71,35 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
 
           return Column(
             children: [
-              TableCalendar(
-                firstDay: DateTime(2020),
-                lastDay: DateTime(2030),
-                focusedDay: _focusedDay,
-                selectedDayPredicate: (day) =>
-                    _selectedDay != null && isSameDay(day, _selectedDay),
-                onDaySelected: (selected, focused) {
-                  setState(() {
-                    _selectedDay = selected;
+              ExcludeSemantics(
+                child: TableCalendar(
+                  firstDay: DateTime(2020),
+                  lastDay: DateTime(2030),
+                  focusedDay: _focusedDay,
+                  selectedDayPredicate: (day) =>
+                      _selectedDay != null && isSameDay(day, _selectedDay),
+                  onDaySelected: (selected, focused) {
+                    setState(() {
+                      _selectedDay = selected;
+                      _focusedDay = focused;
+                    });
+                  },
+                  onPageChanged: (focused) {
                     _focusedDay = focused;
-                  });
-                },
-                onPageChanged: (focused) {
-                  _focusedDay = focused;
-                },
-                eventLoader: (day) {
-                  final key = DateTime(day.year, day.month, day.day);
-                  return eventsByDay[key] ?? [];
-                },
-                calendarStyle: const CalendarStyle(
-                  markerDecoration: BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
+                  },
+                  eventLoader: (day) {
+                    final key = DateTime(day.year, day.month, day.day);
+                    return eventsByDay[key] ?? [];
+                  },
+                  calendarStyle: const CalendarStyle(
+                    markerDecoration: BoxDecoration(
+                      color: Colors.blue,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                headerStyle: const HeaderStyle(
-                  formatButtonVisible: false,
+                  headerStyle: const HeaderStyle(
+                    formatButtonVisible: false,
+                  ),
                 ),
               ),
               const Divider(height: 1),
