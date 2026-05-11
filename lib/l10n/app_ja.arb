@@ -39,5 +39,67 @@
   "titleRequired": "タイトルは必須です",
   "detailsRequired": "詳細は必須です",
   "profanityTitle": "タイトルに不適切な言葉を含めることはできません",
-  "profanityDetails": "詳細に不適切な言葉を含めることはできません"
+  "profanityDetails": "詳細に不適切な言葉を含めることはできません",
+
+  "thisWeek": "今週",
+  "tomorrow": "明日",
+  "child": "子ども",
+
+  "repeat": "繰り返し",
+  "none": "なし",
+  "photo": "写真",
+  "unsplash": "Unsplash",
+  "notSet": "未設定",
+
+  "ratingSad": "悲しい",
+  "ratingOkay": "まあまあ",
+  "ratingGood": "良い",
+  "ratingGreat": "最高",
+
+  "timezone": "タイムゾーン",
+  "selectTimezone": "タイムゾーンを選択",
+  "voicePreviewText": "これは音声のプレビューです",
+
+  "deleteEvent": "イベントを削除",
+  "recurringLabel": "繰り返し",
+
+  "editRecurringEvent": "繰り返しイベントを編集",
+  "editRecurringMessage": "すべてのイベントを編集しますか、それともこの回のみですか？",
+  "justThisOne": "この回のみ",
+  "allEvents": "すべてのイベント",
+
+  "daily": "毎日",
+  "weekly": "毎週",
+  "monthly": "毎月",
+  "every": "毎",
+  "dayUnit": "日",
+  "weekUnit": "週",
+  "monthUnit": "月",
+  "onDay": "毎月",
+  "noEndDate": "終了日なし",
+  "endsOn": "{date}に終了",
+  "@endsOn": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+
+  "searchUnsplash": "Unsplashを検索",
+  "searchPhotosHint": "写真を検索...",
+  "noResults": "結果が見つかりません",
+  "downloadFailed": "画像のダウンロードに失敗しました",
+
+  "skip": "スキップ",
+  "next": "次へ",
+  "getStarted": "はじめる",
+  "onboardingPlanTitle": "一日を計画しよう",
+  "onboardingPlanDesc": "カレンダーにイベントやタスクを作成。今日と今週の予定を確認できます。",
+  "onboardingRecurringTitle": "繰り返しイベント",
+  "onboardingRecurringDesc": "イベントを毎日、毎週、毎月繰り返すよう設定。日課を忘れません。",
+  "onboardingTtsTitle": "読み上げ",
+  "onboardingTtsDesc": "スピーカーボタンをタップすると、イベントの詳細を読み上げます。英語と日本語に対応。",
+  "onboardingReviewTitle": "気持ちをレビュー",
+  "onboardingReviewDesc": "イベントの後、どうだったか評価しましょう。気分が落ちているときは、楽しみなことを思い出させます。",
+  "onboardingPhotoTitle": "写真を追加",
+  "onboardingPhotoDesc": "カメラ、ギャラリー、またはUnsplashから写真を添付できます。"
 }
