@@ -27,9 +27,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
   DateTime? _selectedDay;
   _CalendarView _view = _CalendarView.month;
 
-  DateTime get _effectiveDay =>
-      _selectedDay ??
-      DateTime(_focusedDay.year, _focusedDay.month, _focusedDay.day);
+  DateTime get _effectiveDay {
+    final d = _selectedDay ?? _focusedDay;
+    return DateTime(d.year, d.month, d.day);
+  }
 
   ({DateTime start, DateTime end}) _visibleRange() {
     switch (_view) {
