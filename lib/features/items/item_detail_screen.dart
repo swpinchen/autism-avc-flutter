@@ -5,7 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import 'package:drift/drift.dart' hide Column;
+import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
+import 'package:autism_avc_flutter/features/items/recurring_edit_dialog.dart';
 import 'package:autism_avc_flutter/features/reviews/review_bottom_sheet.dart';
 
 class ItemDetailScreen extends ConsumerWidget {
@@ -35,7 +38,36 @@ class ItemDetailScreen extends ConsumerWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () => context.push('/items/${item.id}/edit'),
+                onPressed: () async {
+                  if (item.recurringRule != null &&
+                      item.recurringRule!.isNotEmpty) {
+                    final choice =
+                        await showRecurringEditDialog(context);
+                    if (choice == null || !context.mounted) return;
+
+                    if (choice == RecurringEditChoice.thisOne) {
+                      // Create exception for this date + duplicate
+                      await db.insertException(
+                          ItemExceptionsCompanion.insert(
+                        itemId: item.id,
+                        startTime: item.startDate,
+                      ));
+                      final newId = await db.insertItem(
+                          ItemsCompanion.insert(
+                        title: item.title,
+                        details: Value(item.details),
+                        startDate: item.startDate,
+                        endDate: Value(item.endDate),
+                        imagePath: Value(item.imagePath),
+                      ));
+                      if (context.mounted) {
+                        context.push('/items/$newId/edit');
+                      }
+                      return;
+                    }
+                  }
+                  context.push('/items/${item.id}/edit');
+                },
               ),
               IconButton(
                 icon: const Icon(Icons.delete),

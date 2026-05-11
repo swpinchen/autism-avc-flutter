@@ -35,6 +35,57 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Divider(),
 
+          // Timezone
+          ListTile(
+            leading: const Icon(Icons.schedule),
+            title: const Text('Timezone'),
+            subtitle: Text(ref.watch(timeZoneProvider)),
+            onTap: () async {
+              final timezones = [
+                'UTC',
+                'America/New_York',
+                'America/Chicago',
+                'America/Denver',
+                'America/Los_Angeles',
+                'America/Anchorage',
+                'Pacific/Honolulu',
+                'Europe/London',
+                'Europe/Paris',
+                'Europe/Berlin',
+                'Asia/Tokyo',
+                'Asia/Shanghai',
+                'Asia/Kolkata',
+                'Asia/Dubai',
+                'Australia/Sydney',
+                'Pacific/Auckland',
+              ];
+              final current = ref.read(timeZoneProvider);
+              final picked = await showDialog<String>(
+                context: context,
+                builder: (ctx) => SimpleDialog(
+                  title: const Text('Select Timezone'),
+                  children: timezones.map((tz) {
+                    return SimpleDialogOption(
+                      onPressed: () => Navigator.pop(ctx, tz),
+                      child: Text(
+                        tz,
+                        style: TextStyle(
+                          fontWeight:
+                              tz == current ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              );
+              if (picked != null) {
+                ref.read(timeZoneProvider.notifier).state = picked;
+                prefs.setString('timeZone', picked);
+              }
+            },
+          ),
+          const Divider(),
+
           // TTS section
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),

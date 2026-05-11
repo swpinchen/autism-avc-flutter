@@ -7,6 +7,7 @@ import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/router/app_router.dart';
 import 'package:autism_avc_flutter/core/services/tts_service.dart';
 import 'package:autism_avc_flutter/core/theme/app_theme.dart';
+import 'package:autism_avc_flutter/features/onboarding/onboarding_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,11 +36,41 @@ Future<void> main() async {
   );
 }
 
-class AutismAvcApp extends StatelessWidget {
+class AutismAvcApp extends ConsumerStatefulWidget {
   const AutismAvcApp({super.key});
 
   @override
+  ConsumerState<AutismAvcApp> createState() => _AutismAvcAppState();
+}
+
+class _AutismAvcAppState extends ConsumerState<AutismAvcApp> {
+  bool _showOnboarding = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final prefs = ref.read(sharedPreferencesProvider);
+    _showOnboarding = !(prefs.getBool('onboarding_complete') ?? false);
+  }
+
+  void _completeOnboarding() {
+    final prefs = ref.read(sharedPreferencesProvider);
+    prefs.setBool('onboarding_complete', true);
+    setState(() => _showOnboarding = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_showOnboarding) {
+      return MaterialApp(
+        title: 'Autism AVC',
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        debugShowCheckedModeBanner: false,
+        home: OnboardingScreen(onComplete: _completeOnboarding),
+      );
+    }
+
     return MaterialApp.router(
       title: 'Autism AVC',
       theme: AppTheme.light,

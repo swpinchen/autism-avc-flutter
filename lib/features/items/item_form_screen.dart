@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
+import 'package:autism_avc_flutter/features/items/recurring_rule_picker.dart';
+import 'package:autism_avc_flutter/features/items/unsplash_picker_screen.dart';
 
 class ItemFormScreen extends ConsumerStatefulWidget {
   final int? editItemId;
@@ -118,6 +120,24 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                   : 'Not set'),
               onTap: _pickEndDate,
             ),
+            // Recurring rule
+            ListTile(
+              leading: const Icon(Icons.repeat),
+              title: const Text('Repeat'),
+              subtitle: Text(_recurringRule ?? 'None'),
+              onTap: () async {
+                final rule = await showModalBottomSheet<String?>(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (_) => RecurringRulePicker(
+                      initialRule: _recurringRule),
+                );
+                // rule is null if cancelled, or a String? (null = 'None')
+                if (rule != null || rule == null) {
+                  setState(() => _recurringRule = rule);
+                }
+              },
+            ),
             const SizedBox(height: 16),
 
             // Photo
@@ -146,18 +166,24 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ],
               )
             else
-              Row(
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   OutlinedButton.icon(
                     onPressed: () => _pickImage(ImageSource.camera),
                     icon: const Icon(Icons.camera_alt),
                     label: const Text('Camera'),
                   ),
-                  const SizedBox(width: 8),
                   OutlinedButton.icon(
                     onPressed: () => _pickImage(ImageSource.gallery),
                     icon: const Icon(Icons.photo_library),
                     label: const Text('Gallery'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: _pickUnsplash,
+                    icon: const Icon(Icons.image_search),
+                    label: const Text('Unsplash'),
                   ),
                 ],
               ),
@@ -233,6 +259,16 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final imageService = ref.read(imageStorageServiceProvider);
     final path = await imageService.saveImage(File(picked.path));
     setState(() => _imagePath = path);
+  }
+
+  Future<void> _pickUnsplash() async {
+    final path = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const UnsplashPickerScreen()),
+    );
+    if (path != null) {
+      setState(() => _imagePath = path);
+    }
   }
 
   Future<void> _save() async {

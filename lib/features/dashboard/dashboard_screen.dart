@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
 
@@ -102,7 +101,7 @@ class _ItemCard extends StatelessWidget {
                     width: 56,
                     height: 56,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const SizedBox(
+                    errorBuilder: (_, e, st) => const SizedBox(
                       width: 56,
                       height: 56,
                       child: Icon(Icons.image_not_supported),
