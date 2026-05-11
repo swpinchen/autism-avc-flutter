@@ -108,5 +108,7 @@
   "day": "日",
   "allDay": "終日",
   "noTime": "時間未設定",
-  "goBack": "戻る"
+  "goBack": "戻る",
+
+  "encourageMessage": "気持ちを教えてくれてありがとう。{day}の{date}に楽しみなことがあるよ！"
 }

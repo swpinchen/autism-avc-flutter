@@ -631,6 +631,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go back'**
   String get goBack;
+
+  /// No description provided for @encourageMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for telling me how you feel. Just remember you have this to look forward to on {day}, {date}!'**
+  String encourageMessage(String day, String date);
 }
 
 class _AppLocalizationsDelegate
