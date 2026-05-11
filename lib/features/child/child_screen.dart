@@ -12,11 +12,37 @@ import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
 // Rating emojis matching the Rails 1–4 scale (same as ReviewBottomSheet)
 const _kEmojis = ['😢', '😐', '🙂', '😄'];
 
-class ChildScreen extends ConsumerWidget {
+class ChildScreen extends ConsumerStatefulWidget {
   const ChildScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ChildScreen> createState() => _ChildScreenState();
+}
+
+class _ChildScreenState extends ConsumerState<ChildScreen> {
+  late final PageController _pageController;
+  int _currentPage = 0;
+
+  // Build the 7-day list once per build cycle
+  late final List<DateTime> _days;
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    _days = List.generate(7, (i) => today.add(Duration(days: i)));
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final itemsAsync = ref.watch(allItemsProvider);
     final exceptionsAsync = ref.watch(allExceptionsProvider);
     final reviewsAsync = ref.watch(allReviewsProvider);
@@ -41,13 +67,9 @@ class ChildScreen extends ConsumerWidget {
             }
           }
 
-          final now = DateTime.now();
-          final today = DateTime(now.year, now.month, now.day);
-          final tomorrow = today.add(const Duration(days: 1));
-
-          // 7-day window: today … today+6
-          final days = List.generate(7, (i) => today.add(Duration(days: i)));
-          final weekEnd = days.last
+          final today = _days.first;
+          final tomorrow = _days[1];
+          final weekEnd = _days.last
               .add(const Duration(hours: 23, minutes: 59, seconds: 59));
 
           final occurrences = recurrenceService.expandItems(
@@ -59,7 +81,7 @@ class ChildScreen extends ConsumerWidget {
 
           // Group occurrences by calendar day
           final occsByDay = <DateTime, List<ItemOccurrence>>{};
-          for (final day in days) {
+          for (final day in _days) {
             occsByDay[day] = occurrences
                 .where((o) =>
                     o.occurrenceStart.year == day.year &&
@@ -68,86 +90,71 @@ class ChildScreen extends ConsumerWidget {
                 .toList();
           }
 
-          // Each column is ~40 % of screen width; clamp to a sensible range
-          final columnWidth =
-              (MediaQuery.of(context).size.width * 0.42).clamp(140.0, 220.0);
+          return Column(
+            children: [
+              // ── Day-selector strip ─────────────────────────────────
+              _DayStrip(
+                days: _days,
+                today: today,
+                tomorrow: tomorrow,
+                selectedIndex: _currentPage,
+                onDayTap: (i) {
+                  setState(() => _currentPage = i);
+                  _pageController.animateToPage(
+                    i,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
 
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  height: constraints.maxHeight,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: days.map((day) {
-                      final isToday = day == today;
-                      final isTomorrow = day == tomorrow;
-                      final label = isToday
-                          ? 'Today'
-                          : isTomorrow
-                              ? 'Tomorrow'
-                              : DateFormat.EEEE().format(day);
-                      final dateLabel = DateFormat('M/d').format(day);
-                      final dayOccs = occsByDay[day] ?? [];
+              // ── Day pages ──────────────────────────────────────────
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _days.length,
+                  onPageChanged: (i) => setState(() => _currentPage = i),
+                  itemBuilder: (context, i) {
+                    final day = _days[i];
+                    final dayOccs = occsByDay[day] ?? [];
 
-                      return SizedBox(
-                        width: columnWidth,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            // ── Day header ──────────────────────────────
-                            _DayHeader(
-                              label: label,
-                              dateLabel: dateLabel,
-                              isToday: isToday,
-                            ),
-
-                            // ── Event cards (independently scrollable) ──
-                            Expanded(
-                              child: dayOccs.isEmpty
-                                  ? const Center(
-                                      child: Text(
-                                        '—',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                    )
-                                  : ListView.builder(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 16, top: 4),
-                                      itemCount: dayOccs.length,
-                                      itemBuilder: (context, i) {
-                                        final occ = dayOccs[i];
-                                        return _ChildCard(
-                                          occurrence: occ,
-                                          lastReview:
-                                              lastReviewMap[occ.item.id],
-                                          columnWidth: columnWidth,
-                                          onTap: () => context
-                                              .push('/items/${occ.item.id}'),
-                                          onRate: (rating) async {
-                                            final db =
-                                                ref.read(databaseProvider);
-                                            await db.insertReview(
-                                              ReviewsCompanion.insert(
-                                                itemId: occ.item.id,
-                                                rating: rating,
-                                                date: DateTime.now(),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ],
+                    if (dayOccs.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'No events today',
+                          style: TextStyle(fontSize: 18),
                         ),
                       );
-                    }).toList(),
-                  ),
+                    }
+
+                    return ListView.builder(
+                      padding:
+                          const EdgeInsets.fromLTRB(12, 8, 12, 32),
+                      itemCount: dayOccs.length,
+                      itemBuilder: (context, j) {
+                        final occ = dayOccs[j];
+                        return _ChildCard(
+                          occurrence: occ,
+                          lastReview: lastReviewMap[occ.item.id],
+                          onTap: () =>
+                              context.push('/items/${occ.item.id}'),
+                          onRate: (rating) async {
+                            final db = ref.read(databaseProvider);
+                            await db.insertReview(
+                              ReviewsCompanion.insert(
+                                itemId: occ.item.id,
+                                rating: rating,
+                                date: DateTime.now(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ],
           );
         },
       ),
@@ -155,51 +162,85 @@ class ChildScreen extends ConsumerWidget {
   }
 }
 
-// ── Day column header ─────────────────────────────────────────────────────────
+// ── Day-selector strip ────────────────────────────────────────────────────────
 
-class _DayHeader extends StatelessWidget {
-  final String label;
-  final String dateLabel;
-  final bool isToday;
+class _DayStrip extends StatelessWidget {
+  final List<DateTime> days;
+  final DateTime today;
+  final DateTime tomorrow;
+  final int selectedIndex;
+  final ValueChanged<int> onDayTap;
 
-  const _DayHeader({
-    required this.label,
-    required this.dateLabel,
-    required this.isToday,
+  const _DayStrip({
+    required this.days,
+    required this.today,
+    required this.tomorrow,
+    required this.selectedIndex,
+    required this.onDayTap,
   });
+
+  String _label(DateTime day) {
+    if (day == today) return 'Today';
+    if (day == tomorrow) return 'Tomorrow';
+    return DateFormat.E().format(day); // Mon, Tue …
+  }
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Container(
-      decoration: BoxDecoration(
-        color: isToday ? cs.primaryContainer : cs.surfaceContainerHighest,
-        border: Border(
-          right: BorderSide(color: cs.outlineVariant, width: 0.5),
-          bottom: BorderSide(color: cs.outlineVariant),
+      color: cs.surface,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Row(
+          children: List.generate(days.length, (i) {
+            final day = days[i];
+            final isSelected = i == selectedIndex;
+            final isToday = day == today;
+            return GestureDetector(
+              onTap: () => onDayTap(i),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? cs.primary
+                      : isToday
+                          ? cs.primaryContainer
+                          : cs.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(40),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _label(day),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: isSelected
+                                ? cs.onPrimary
+                                : isToday
+                                    ? cs.onPrimaryContainer
+                                    : cs.onSurface,
+                          ),
+                    ),
+                    Text(
+                      DateFormat('M/d').format(day),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: isSelected
+                                ? cs.onPrimary.withValues(alpha: 0.8)
+                                : cs.onSurfaceVariant,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
         ),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: isToday ? cs.onPrimaryContainer : null,
-                ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            dateLabel,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: isToday
-                      ? cs.onPrimaryContainer.withValues(alpha: 0.7)
-                      : cs.onSurfaceVariant,
-                ),
-            textAlign: TextAlign.center,
-          ),
-        ],
       ),
     );
   }
@@ -210,14 +251,12 @@ class _DayHeader extends StatelessWidget {
 class _ChildCard extends StatelessWidget {
   final ItemOccurrence occurrence;
   final Review? lastReview;
-  final double columnWidth;
   final VoidCallback onTap;
   final Future<void> Function(int rating) onRate;
 
   const _ChildCard({
     required this.occurrence,
     required this.lastReview,
-    required this.columnWidth,
     required this.onTap,
     required this.onRate,
   });
