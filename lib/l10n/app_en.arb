@@ -1,0 +1,43 @@
+{
+  "@@locale": "en",
+  "appTitle": "Autism AVC",
+  "today": "Today",
+  "calendar": "Calendar",
+  "settings": "Settings",
+  "newEvent": "New Event",
+  "editEvent": "Edit Event",
+  "title": "Title",
+  "details": "Details",
+  "start": "Start",
+  "end": "End",
+  "create": "Create",
+  "update": "Update",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "readAloud": "Read Aloud",
+  "review": "Review",
+  "submit": "Submit",
+  "done": "Done",
+  "thankYou": "Thank you!",
+  "howDoYouFeel": "How do you feel about this?",
+  "noEventsToday": "No events today.\nTap + to add one!",
+  "noEventsOnDay": "No events on this day",
+  "deleteConfirm": "Are you sure you want to delete this event?",
+  "language": "Language",
+  "textToSpeech": "Text-to-Speech",
+  "pitch": "Pitch",
+  "speed": "Speed",
+  "previewVoice": "Preview Voice",
+  "happyMessage": "Thank you for telling me how you feel. Just remember you get to {details}",
+  "@happyMessage": {
+    "placeholders": {
+      "details": { "type": "String" }
+    }
+  },
+  "titleRequired": "Title is required",
+  "detailsRequired": "Details are required",
+  "profanityTitle": "Title can't include obscene words",
+  "profanityDetails": "Details can't include obscene words"
+}

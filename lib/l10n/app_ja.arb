@@ -1,0 +1,43 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Autism AVC",
+  "today": "今日",
+  "calendar": "カレンダー",
+  "settings": "設定",
+  "newEvent": "新しいイベント",
+  "editEvent": "イベントを編集",
+  "title": "タイトル",
+  "details": "詳細",
+  "start": "開始",
+  "end": "終了",
+  "create": "作成",
+  "update": "更新",
+  "delete": "削除",
+  "cancel": "キャンセル",
+  "camera": "カメラ",
+  "gallery": "ギャラリー",
+  "readAloud": "読み上げ",
+  "review": "レビュー",
+  "submit": "送信",
+  "done": "完了",
+  "thankYou": "ありがとう！",
+  "howDoYouFeel": "どう感じましたか？",
+  "noEventsToday": "今日のイベントはありません。\n＋をタップして追加！",
+  "noEventsOnDay": "この日のイベントはありません",
+  "deleteConfirm": "このイベントを削除してもよろしいですか？",
+  "language": "言語",
+  "textToSpeech": "音声読み上げ",
+  "pitch": "ピッチ",
+  "speed": "速度",
+  "previewVoice": "音声プレビュー",
+  "happyMessage": "教えてくれてありがとう！その気持ちわかるよ。でも大丈夫！ もうすぐ{details}",
+  "@happyMessage": {
+    "placeholders": {
+      "details": { "type": "String" }
+    }
+  },
+  "titleRequired": "タイトルは必須です",
+  "detailsRequired": "詳細は必須です",
+  "profanityTitle": "タイトルに不適切な言葉を含めることはできません",
+  "profanityDetails": "詳細に不適切な言葉を含めることはできません"
+}

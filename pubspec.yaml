@@ -1,0 +1,77 @@
+name: autism_avc_flutter
+description: "Autism AVC - Offline calendar/task management app for users with autism."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Database (SQLite)
+  drift: ^2.22.1
+  sqlite3_flutter_libs: ^0.5.28
+
+  # Routing
+  go_router: ^14.8.1
+
+  # TTS
+  flutter_tts: ^4.2.0
+
+  # Calendar
+  table_calendar: ^3.2.0
+
+  # Recurring rules (RFC 5545)
+  rrule: ^0.2.16
+
+  # Image handling
+  image_picker: ^1.1.2
+  path_provider: ^2.1.5
+  image: ^4.5.3
+
+  # Preferences
+  shared_preferences: ^2.3.5
+
+  # Networking (Unsplash API)
+  http: ^1.3.0
+
+  # Environment config
+  flutter_dotenv: ^5.2.1
+
+  # Localization
+  intl: any
+
+  # Utilities
+  path: ^1.9.1
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Drift code generation
+  drift_dev: ^2.22.1
+  build_runner: ^2.4.14
+
+  # Riverpod code generation
+  riverpod_generator: ^2.6.3
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.3
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/
+    - .env
