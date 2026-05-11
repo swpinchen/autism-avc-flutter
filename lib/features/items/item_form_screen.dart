@@ -11,6 +11,7 @@ import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/features/items/recurring_rule_picker.dart';
 import 'package:autism_avc_flutter/features/items/unsplash_picker_screen.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class ItemFormScreen extends ConsumerStatefulWidget {
   final int? editItemId;
@@ -68,9 +69,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Event' : 'New Event'),
+        title: Text(isEditing ? l10n.editEvent : l10n.newEvent),
       ),
       body: Form(
         key: _formKey,
@@ -80,51 +83,51 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             // Title
             TextFormField(
               controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.title,
+                border: const OutlineInputBorder(),
               ),
               validator: (v) =>
-                  v == null || v.isEmpty ? 'Title is required' : null,
+                  v == null || v.isEmpty ? l10n.titleRequired : null,
             ),
             const SizedBox(height: 16),
 
             // Details
             TextFormField(
               controller: _detailsController,
-              decoration: const InputDecoration(
-                labelText: 'Details',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.details,
+                border: const OutlineInputBorder(),
               ),
               maxLines: 3,
               validator: (v) =>
-                  v == null || v.isEmpty ? 'Details are required' : null,
+                  v == null || v.isEmpty ? l10n.detailsRequired : null,
             ),
             const SizedBox(height: 16),
 
             // Start date/time
             ListTile(
               leading: const Icon(Icons.calendar_today),
-              title: const Text('Start'),
+              title: Text(l10n.start),
               subtitle: Text(
-                  DateFormat.yMMMd().add_jm().format(_startDate)),
+                  DateFormat.yMMMd(l10n.localeName).add_jm().format(_startDate)),
               onTap: _pickStartDate,
             ),
 
             // End date/time
             ListTile(
               leading: const Icon(Icons.calendar_today),
-              title: const Text('End'),
+              title: Text(l10n.end),
               subtitle: Text(_endDate != null
-                  ? DateFormat.yMMMd().add_jm().format(_endDate!)
-                  : 'Not set'),
+                  ? DateFormat.yMMMd(l10n.localeName).add_jm().format(_endDate!)
+                  : l10n.notSet),
               onTap: _pickEndDate,
             ),
             // Recurring rule
             ListTile(
               leading: const Icon(Icons.repeat),
-              title: const Text('Repeat'),
-              subtitle: Text(_recurringRule ?? 'None'),
+              title: Text(l10n.repeat),
+              subtitle: Text(_recurringRule ?? l10n.none),
               onTap: () async {
                 final rule = await showModalBottomSheet<String?>(
                   context: context,
@@ -141,7 +144,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             const SizedBox(height: 16),
 
             // Photo
-            Text('Photo', style: Theme.of(context).textTheme.titleSmall),
+            Text(l10n.photo, style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             if (_imagePath != null)
               Stack(
@@ -182,17 +185,17 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                   OutlinedButton.icon(
                     onPressed: () => _pickImage(ImageSource.camera),
                     icon: const Icon(Icons.camera_alt),
-                    label: const Text('Camera'),
+                    label: Text(l10n.camera),
                   ),
                   OutlinedButton.icon(
                     onPressed: () => _pickImage(ImageSource.gallery),
                     icon: const Icon(Icons.photo_library),
-                    label: const Text('Gallery'),
+                    label: Text(l10n.gallery),
                   ),
                   OutlinedButton.icon(
                     onPressed: _pickUnsplash,
                     icon: const Icon(Icons.image_search),
-                    label: const Text('Unsplash'),
+                    label: Text(l10n.unsplash),
                   ),
                 ],
               ),
@@ -207,7 +210,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                       width: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text(isEditing ? 'Update' : 'Create'),
+                  : Text(isEditing ? l10n.update : l10n.create),
             ),
           ],
         ),

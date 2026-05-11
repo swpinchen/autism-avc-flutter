@@ -307,6 +307,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Details can\'t include obscene words'**
   String get profanityDetails;
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This Week'**
+  String get thisWeek;
+
+  /// No description provided for @tomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrow;
+
+  /// No description provided for @child.
+  ///
+  /// In en, this message translates to:
+  /// **'Child'**
+  String get child;
+
+  /// No description provided for @repeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get repeat;
+
+  /// No description provided for @none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get none;
+
+  /// No description provided for @photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get photo;
+
+  /// No description provided for @unsplash.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsplash'**
+  String get unsplash;
+
+  /// No description provided for @notSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get notSet;
+
+  /// No description provided for @ratingSad.
+  ///
+  /// In en, this message translates to:
+  /// **'Sad'**
+  String get ratingSad;
+
+  /// No description provided for @ratingOkay.
+  ///
+  /// In en, this message translates to:
+  /// **'Okay'**
+  String get ratingOkay;
+
+  /// No description provided for @ratingGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get ratingGood;
+
+  /// No description provided for @ratingGreat.
+  ///
+  /// In en, this message translates to:
+  /// **'Great'**
+  String get ratingGreat;
+
+  /// No description provided for @timezone.
+  ///
+  /// In en, this message translates to:
+  /// **'Timezone'**
+  String get timezone;
+
+  /// No description provided for @selectTimezone.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Timezone'**
+  String get selectTimezone;
+
+  /// No description provided for @voicePreviewText.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a voice preview'**
+  String get voicePreviewText;
+
+  /// No description provided for @deleteEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Event'**
+  String get deleteEvent;
+
+  /// No description provided for @recurringLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring'**
+  String get recurringLabel;
+
+  /// No description provided for @editRecurringEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Recurring Event'**
+  String get editRecurringEvent;
+
+  /// No description provided for @editRecurringMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to edit all occurrences or just this one?'**
+  String get editRecurringMessage;
+
+  /// No description provided for @justThisOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Just This One'**
+  String get justThisOne;
+
+  /// No description provided for @allEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'All Events'**
+  String get allEvents;
+
+  /// No description provided for @daily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get daily;
+
+  /// No description provided for @weekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// No description provided for @monthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly;
+
+  /// No description provided for @every.
+  ///
+  /// In en, this message translates to:
+  /// **'Every'**
+  String get every;
+
+  /// No description provided for @dayUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'day(s)'**
+  String get dayUnit;
+
+  /// No description provided for @weekUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'week(s)'**
+  String get weekUnit;
+
+  /// No description provided for @monthUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'month(s)'**
+  String get monthUnit;
+
+  /// No description provided for @onDay.
+  ///
+  /// In en, this message translates to:
+  /// **'On day'**
+  String get onDay;
+
+  /// No description provided for @noEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'No end date'**
+  String get noEndDate;
+
+  /// No description provided for @endsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends {date}'**
+  String endsOn(String date);
+
+  /// No description provided for @searchUnsplash.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Unsplash'**
+  String get searchUnsplash;
+
+  /// No description provided for @searchPhotosHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search photos...'**
+  String get searchPhotosHint;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResults;
+
+  /// No description provided for @downloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download image'**
+  String get downloadFailed;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @onboardingPlanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan Your Day'**
+  String get onboardingPlanTitle;
+
+  /// No description provided for @onboardingPlanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Create events and tasks on your calendar. See what\'s coming up today and this week.'**
+  String get onboardingPlanDesc;
+
+  /// No description provided for @onboardingRecurringTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring Events'**
+  String get onboardingRecurringTitle;
+
+  /// No description provided for @onboardingRecurringDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Set events to repeat daily, weekly, or monthly. Never forget your routine.'**
+  String get onboardingRecurringDesc;
+
+  /// No description provided for @onboardingTtsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Aloud'**
+  String get onboardingTtsTitle;
+
+  /// No description provided for @onboardingTtsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the speaker button to hear event details read aloud. Works in English and Japanese.'**
+  String get onboardingTtsDesc;
+
+  /// No description provided for @onboardingReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review How You Feel'**
+  String get onboardingReviewTitle;
+
+  /// No description provided for @onboardingReviewDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'After an event, rate how it went. If you\'re feeling down, we\'ll remind you of something to look forward to.'**
+  String get onboardingReviewDesc;
+
+  /// No description provided for @onboardingPhotoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photos'**
+  String get onboardingPhotoTitle;
+
+  /// No description provided for @onboardingPhotoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach photos from your camera, gallery, or search Unsplash for the perfect image.'**
+  String get onboardingPhotoDesc;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get day;
+
+  /// No description provided for @allDay.
+  ///
+  /// In en, this message translates to:
+  /// **'All day'**
+  String get allDay;
+
+  /// No description provided for @noTime.
+  ///
+  /// In en, this message translates to:
+  /// **'No time set'**
+  String get noTime;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get goBack;
 }
 
 class _AppLocalizationsDelegate

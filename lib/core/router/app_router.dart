@@ -5,7 +5,9 @@ import 'package:autism_avc_flutter/features/calendar/calendar_screen.dart';
 import 'package:autism_avc_flutter/features/dashboard/dashboard_screen.dart';
 import 'package:autism_avc_flutter/features/items/item_detail_screen.dart';
 import 'package:autism_avc_flutter/features/items/item_form_screen.dart';
+import 'package:autism_avc_flutter/features/child/child_screen.dart';
 import 'package:autism_avc_flutter/features/settings/settings_screen.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -29,6 +31,10 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/settings',
           builder: (context, state) => const SettingsScreen(),
+        ),
+        GoRoute(
+          path: '/child',
+          builder: (context, state) => const ChildScreen(),
         ),
       ],
     ),
@@ -68,23 +74,28 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex(context),
         onDestinationSelected: (index) => _onTap(context, index),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Today',
+            icon: const Icon(Icons.home),
+            label: l10n.today,
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
+            icon: const Icon(Icons.calendar_month),
+            label: l10n.calendar,
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings),
+            label: l10n.settings,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.child_care),
+            label: l10n.child,
           ),
         ],
       ),
@@ -95,6 +106,7 @@ class AppShell extends StatelessWidget {
     final location = GoRouterState.of(context).uri.path;
     if (location.startsWith('/calendar')) return 1;
     if (location.startsWith('/settings')) return 2;
+    if (location.startsWith('/child')) return 3;
     return 0;
   }
 
@@ -106,6 +118,8 @@ class AppShell extends StatelessWidget {
         context.go('/calendar');
       case 2:
         context.go('/settings');
+      case 3:
+        context.go('/child');
     }
   }
 }

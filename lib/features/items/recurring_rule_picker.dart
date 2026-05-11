@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 /// A bottom sheet picker that lets the user configure a recurrence rule
 /// and returns an RRULE string (RFC 5545).
@@ -104,6 +105,7 @@ class _RecurringRulePickerState extends State<RecurringRulePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.only(
         left: 16,
@@ -115,17 +117,17 @@ class _RecurringRulePickerState extends State<RecurringRulePicker> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Repeat', style: Theme.of(context).textTheme.titleLarge),
+          Text(l10n.repeat, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 12),
 
           // Frequency selector
           SegmentedButton<_Frequency>(
-            segments: const [
-              ButtonSegment(value: _Frequency.none, label: Text('None')),
-              ButtonSegment(value: _Frequency.daily, label: Text('Daily')),
-              ButtonSegment(value: _Frequency.weekly, label: Text('Weekly')),
+            segments: [
+              ButtonSegment(value: _Frequency.none, label: Text(l10n.none)),
+              ButtonSegment(value: _Frequency.daily, label: Text(l10n.daily)),
+              ButtonSegment(value: _Frequency.weekly, label: Text(l10n.weekly)),
               ButtonSegment(
-                  value: _Frequency.monthly, label: Text('Monthly')),
+                  value: _Frequency.monthly, label: Text(l10n.monthly)),
             ],
             selected: {_frequency},
             onSelectionChanged: (v) =>
@@ -137,7 +139,7 @@ class _RecurringRulePickerState extends State<RecurringRulePicker> {
           if (_frequency != _Frequency.none)
             Row(
               children: [
-                const Text('Every '),
+                Text('${l10n.every} '),
                 SizedBox(
                   width: 60,
                   child: DropdownButton<int>(
@@ -149,10 +151,10 @@ class _RecurringRulePickerState extends State<RecurringRulePicker> {
                   ),
                 ),
                 Text(_frequency == _Frequency.daily
-                    ? ' day(s)'
+                    ? ' ${l10n.dayUnit}'
                     : _frequency == _Frequency.weekly
-                        ? ' week(s)'
-                        : ' month(s)'),
+                        ? ' ${l10n.weekUnit}'
+                        : ' ${l10n.monthUnit}'),
               ],
             ),
 
@@ -185,7 +187,7 @@ class _RecurringRulePickerState extends State<RecurringRulePicker> {
             const SizedBox(height: 12),
             Row(
               children: [
-                const Text('On day '),
+                Text('${l10n.onDay} '),
                 SizedBox(
                   width: 60,
                   child: DropdownButton<int>(
@@ -207,8 +209,8 @@ class _RecurringRulePickerState extends State<RecurringRulePicker> {
               contentPadding: EdgeInsets.zero,
               leading: const Icon(Icons.event_busy),
               title: Text(_until != null
-                  ? 'Ends ${_until!.month}/${_until!.day}/${_until!.year}'
-                  : 'No end date'),
+                  ? l10n.endsOn('${_until!.month}/${_until!.day}/${_until!.year}')
+                  : l10n.noEndDate),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -245,12 +247,12 @@ class _RecurringRulePickerState extends State<RecurringRulePicker> {
             children: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: Text(l10n.cancel),
               ),
               const SizedBox(width: 8),
               FilledButton(
                 onPressed: () => Navigator.pop(context, _buildRule()),
-                child: const Text('Done'),
+                child: Text(l10n.done),
               ),
             ],
           ),

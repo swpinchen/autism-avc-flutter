@@ -39,5 +39,74 @@
   "titleRequired": "Title is required",
   "detailsRequired": "Details are required",
   "profanityTitle": "Title can't include obscene words",
-  "profanityDetails": "Details can't include obscene words"
+  "profanityDetails": "Details can't include obscene words",
+
+  "thisWeek": "This Week",
+  "tomorrow": "Tomorrow",
+  "child": "Child",
+
+  "repeat": "Repeat",
+  "none": "None",
+  "photo": "Photo",
+  "unsplash": "Unsplash",
+  "notSet": "Not set",
+
+  "ratingSad": "Sad",
+  "ratingOkay": "Okay",
+  "ratingGood": "Good",
+  "ratingGreat": "Great",
+
+  "timezone": "Timezone",
+  "selectTimezone": "Select Timezone",
+  "voicePreviewText": "This is a voice preview",
+
+  "deleteEvent": "Delete Event",
+  "recurringLabel": "Recurring",
+
+  "editRecurringEvent": "Edit Recurring Event",
+  "editRecurringMessage": "Do you want to edit all occurrences or just this one?",
+  "justThisOne": "Just This One",
+  "allEvents": "All Events",
+
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "every": "Every",
+  "dayUnit": "day(s)",
+  "weekUnit": "week(s)",
+  "monthUnit": "month(s)",
+  "onDay": "On day",
+  "noEndDate": "No end date",
+  "endsOn": "Ends {date}",
+  "@endsOn": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+
+  "searchUnsplash": "Search Unsplash",
+  "searchPhotosHint": "Search photos...",
+  "noResults": "No results found",
+  "downloadFailed": "Failed to download image",
+
+  "skip": "Skip",
+  "next": "Next",
+  "getStarted": "Get Started",
+  "onboardingPlanTitle": "Plan Your Day",
+  "onboardingPlanDesc": "Create events and tasks on your calendar. See what's coming up today and this week.",
+  "onboardingRecurringTitle": "Recurring Events",
+  "onboardingRecurringDesc": "Set events to repeat daily, weekly, or monthly. Never forget your routine.",
+  "onboardingTtsTitle": "Read Aloud",
+  "onboardingTtsDesc": "Tap the speaker button to hear event details read aloud. Works in English and Japanese.",
+  "onboardingReviewTitle": "Review How You Feel",
+  "onboardingReviewDesc": "After an event, rate how it went. If you're feeling down, we'll remind you of something to look forward to.",
+  "onboardingPhotoTitle": "Add Photos",
+  "onboardingPhotoDesc": "Attach photos from your camera, gallery, or search Unsplash for the perfect image.",
+
+  "month": "Month",
+  "week": "Week",
+  "day": "Day",
+  "allDay": "All day",
+  "noTime": "No time set",
+  "goBack": "Go back"
 }

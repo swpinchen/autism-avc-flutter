@@ -50,6 +50,15 @@ dependencies:
   # Localization
   intl: any
 
+  # URL launcher
+  url_launcher: ^6.3.1
+
+  # Fonts
+  google_fonts: ^6.2.1
+
+  # Confetti animation
+  confetti: ^0.7.0
+
   # Utilities
   path: ^1.9.1
   uuid: ^4.5.1
@@ -74,4 +83,20 @@ flutter:
 
   assets:
     - assets/
+    - assets/fonts/
     - .env
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+    - family: Karla
+      fonts:
+        - asset: assets/fonts/Karla-Regular.ttf
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP-Regular.ttf

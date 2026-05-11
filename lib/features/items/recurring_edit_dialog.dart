@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 /// Result of the recurring edit dialog.
 enum RecurringEditChoice {
@@ -13,24 +14,24 @@ enum RecurringEditChoice {
 /// Returns null if cancelled.
 Future<RecurringEditChoice?> showRecurringEditDialog(
     BuildContext context) async {
+  final l10n = AppLocalizations.of(context)!;
   return showDialog<RecurringEditChoice>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: const Text('Edit Recurring Event'),
-      content: const Text(
-          'Do you want to edit all occurrences or just this one?'),
+      title: Text(l10n.editRecurringEvent),
+      content: Text(l10n.editRecurringMessage),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         TextButton(
           onPressed: () => Navigator.pop(ctx, RecurringEditChoice.thisOne),
-          child: const Text('Just This One'),
+          child: Text(l10n.justThisOne),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, RecurringEditChoice.all),
-          child: const Text('All Events'),
+          child: Text(l10n.allEvents),
         ),
       ],
     ),

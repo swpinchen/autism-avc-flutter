@@ -79,3 +79,8 @@ final allExceptionsProvider = FutureProvider<List<ItemException>>((ref) {
   final db = ref.watch(databaseProvider);
   return db.getAllExceptions();
 });
+
+final allReviewsProvider = StreamProvider<List<Review>>((ref) {
+  final db = ref.watch(databaseProvider);
+  return db.watchAllReviews();
+});

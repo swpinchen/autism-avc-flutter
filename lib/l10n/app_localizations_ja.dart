@@ -114,4 +114,169 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get profanityDetails => '詳細に不適切な言葉を含めることはできません';
+
+  @override
+  String get thisWeek => '今週';
+
+  @override
+  String get tomorrow => '明日';
+
+  @override
+  String get child => '子ども';
+
+  @override
+  String get repeat => '繰り返し';
+
+  @override
+  String get none => 'なし';
+
+  @override
+  String get photo => '写真';
+
+  @override
+  String get unsplash => 'Unsplash';
+
+  @override
+  String get notSet => '未設定';
+
+  @override
+  String get ratingSad => '悲しい';
+
+  @override
+  String get ratingOkay => 'まあまあ';
+
+  @override
+  String get ratingGood => '良い';
+
+  @override
+  String get ratingGreat => '最高';
+
+  @override
+  String get timezone => 'タイムゾーン';
+
+  @override
+  String get selectTimezone => 'タイムゾーンを選択';
+
+  @override
+  String get voicePreviewText => 'これは音声のプレビューです';
+
+  @override
+  String get deleteEvent => 'イベントを削除';
+
+  @override
+  String get recurringLabel => '繰り返し';
+
+  @override
+  String get editRecurringEvent => '繰り返しイベントを編集';
+
+  @override
+  String get editRecurringMessage => 'すべてのイベントを編集しますか、それともこの回のみですか？';
+
+  @override
+  String get justThisOne => 'この回のみ';
+
+  @override
+  String get allEvents => 'すべてのイベント';
+
+  @override
+  String get daily => '毎日';
+
+  @override
+  String get weekly => '毎週';
+
+  @override
+  String get monthly => '毎月';
+
+  @override
+  String get every => '毎';
+
+  @override
+  String get dayUnit => '日';
+
+  @override
+  String get weekUnit => '週';
+
+  @override
+  String get monthUnit => '月';
+
+  @override
+  String get onDay => '毎月';
+
+  @override
+  String get noEndDate => '終了日なし';
+
+  @override
+  String endsOn(String date) {
+    return '$dateに終了';
+  }
+
+  @override
+  String get searchUnsplash => 'Unsplashを検索';
+
+  @override
+  String get searchPhotosHint => '写真を検索...';
+
+  @override
+  String get noResults => '結果が見つかりません';
+
+  @override
+  String get downloadFailed => '画像のダウンロードに失敗しました';
+
+  @override
+  String get skip => 'スキップ';
+
+  @override
+  String get next => '次へ';
+
+  @override
+  String get getStarted => 'はじめる';
+
+  @override
+  String get onboardingPlanTitle => '一日を計画しよう';
+
+  @override
+  String get onboardingPlanDesc => 'カレンダーにイベントやタスクを作成。今日と今週の予定を確認できます。';
+
+  @override
+  String get onboardingRecurringTitle => '繰り返しイベント';
+
+  @override
+  String get onboardingRecurringDesc => 'イベントを毎日、毎週、毎月繰り返すよう設定。日課を忘れません。';
+
+  @override
+  String get onboardingTtsTitle => '読み上げ';
+
+  @override
+  String get onboardingTtsDesc => 'スピーカーボタンをタップすると、イベントの詳細を読み上げます。英語と日本語に対応。';
+
+  @override
+  String get onboardingReviewTitle => '気持ちをレビュー';
+
+  @override
+  String get onboardingReviewDesc =>
+      'イベントの後、どうだったか評価しましょう。気分が落ちているときは、楽しみなことを思い出させます。';
+
+  @override
+  String get onboardingPhotoTitle => '写真を追加';
+
+  @override
+  String get onboardingPhotoDesc => 'カメラ、ギャラリー、またはUnsplashから写真を添付できます。';
+
+  @override
+  String get month => '月';
+
+  @override
+  String get week => '週';
+
+  @override
+  String get day => '日';
+
+  @override
+  String get allDay => '終日';
+
+  @override
+  String get noTime => '時間未設定';
+
+  @override
+  String get goBack => '戻る';
 }
