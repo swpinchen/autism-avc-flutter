@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
+import 'package:autism_avc_flutter/core/theme/app_colors.dart';
 import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 /// The three calendar views available.
@@ -128,6 +130,15 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: SegmentedButton<_CalendarView>(
+                  style: SegmentedButton.styleFrom(
+                    backgroundColor: AppColors.primaryBlueLighter30,
+                    foregroundColor: AppColors.primaryBlueDarker10,
+                    selectedBackgroundColor: AppColors.primaryBlueBase,
+                    selectedForegroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                  ),
                   segments: [
                     ButtonSegment(
                       value: _CalendarView.month,
@@ -160,7 +171,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   onNext: _goToNextDay,
                 )
               else
-                ExcludeSemantics(
+                  ExcludeSemantics(
                   child: TableCalendar(
                     firstDay: DateTime(2020),
                     lastDay: DateTime(2030),
@@ -184,14 +195,45 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                       return eventsByDay[key] ?? [];
                     },
                     locale: locale,
-                    calendarStyle: const CalendarStyle(
-                      markerDecoration: BoxDecoration(
-                        color: Colors.blue,
+                    calendarStyle: CalendarStyle(
+                      todayDecoration: const BoxDecoration(
+                        color: AppColors.primaryBlueBase,
                         shape: BoxShape.circle,
                       ),
+                      selectedDecoration: const BoxDecoration(
+                        color: AppColors.primaryBlueDarker10,
+                        shape: BoxShape.circle,
+                      ),
+                      markerDecoration: const BoxDecoration(
+                        color: AppColors.blossomPinkBase,
+                        shape: BoxShape.circle,
+                      ),
+                      defaultTextStyle: const TextStyle(
+                        color: AppColors.neutralGrayDarker30,
+                      ),
+                      weekendTextStyle: TextStyle(
+                        color: AppColors.neutralGrayDarker30
+                            .withValues(alpha: 0.7),
+                      ),
+                      outsideTextStyle: const TextStyle(
+                        color: AppColors.neutralGrayBase,
+                      ),
                     ),
-                    headerStyle: const HeaderStyle(
+                    headerStyle: HeaderStyle(
                       formatButtonVisible: false,
+                      titleTextStyle: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryBlueDarker10,
+                      ),
+                      leftChevronIcon: const Icon(
+                        Icons.chevron_left,
+                        color: AppColors.primaryBlueBase,
+                      ),
+                      rightChevronIcon: const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.primaryBlueBase,
+                      ),
                     ),
                     availableCalendarFormats: _view == _CalendarView.week
                         ? const {CalendarFormat.week: ''}
@@ -248,30 +290,40 @@ class _DayHeader extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      color: isToday
-          ? Theme.of(context)
-              .colorScheme
-              .primaryContainer
-              .withValues(alpha: 0.3)
-          : null,
+      decoration: BoxDecoration(
+        color: isToday ? AppColors.primaryBlueLighter20 : null,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-              icon: const Icon(Icons.chevron_left), onPressed: onPrevious),
+            icon: const Icon(Icons.chevron_left,
+                color: AppColors.primaryBlueBase),
+            onPressed: onPrevious,
+          ),
           Column(
             children: [
               Text(dayName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold)),
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryBlueDarker10,
+                  )),
               const SizedBox(height: 2),
-              Text(dateStr, style: Theme.of(context).textTheme.bodyMedium),
+              Text(dateStr,
+                  style: GoogleFonts.karla(
+                    fontSize: 14,
+                    color: AppColors.neutralGrayDarker20,
+                  )),
             ],
           ),
           IconButton(
-              icon: const Icon(Icons.chevron_right), onPressed: onNext),
+            icon: const Icon(Icons.chevron_right,
+                color: AppColors.primaryBlueBase),
+            onPressed: onNext,
+          ),
         ],
       ),
     );
@@ -308,6 +360,9 @@ class _DayTimeline extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           child: Card(
             clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: InkWell(
               onTap: () => onTap(item.id),
               child: Padding(
@@ -322,14 +377,17 @@ class _DayTimeline extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(startStr,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(fontWeight: FontWeight.bold)),
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primaryBlueDarker10,
+                              )),
                           if (endStr != null)
                             Text(endStr,
-                                style:
-                                    Theme.of(context).textTheme.bodySmall),
+                                style: GoogleFonts.karla(
+                                  fontSize: 12,
+                                  color: AppColors.neutralGrayDarker10,
+                                )),
                         ],
                       ),
                     ),
@@ -339,7 +397,7 @@ class _DayTimeline extends StatelessWidget {
                       height: 48,
                       margin: const EdgeInsets.only(right: 12),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: AppColors.primaryBlueBase,
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -352,7 +410,7 @@ class _DayTimeline extends StatelessWidget {
                             children: [
                               if (item.imagePath != null) ...[
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(6),
+                                  borderRadius: BorderRadius.circular(8),
                                   child: SizedBox(
                                     width: 36,
                                     height: 36,
@@ -420,33 +478,82 @@ class _CompactEventList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 4),
       itemCount: events.length,
       itemBuilder: (context, index) {
         final occ = events[index];
         final timeStr = DateFormat.jm(locale).format(occ.occurrenceStart);
-        return ListTile(
-          leading: occ.item.imagePath != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Image.file(
-                      File(occ.item.imagePath!),
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, e, st) =>
-                          const Icon(Icons.image_not_supported, size: 24),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: () => onTap(occ.item.id),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    // Accent bar
+                    Container(
+                      width: 3,
+                      height: 40,
+                      margin: const EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryBlueBase,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
                     ),
-                  ),
-                )
-              : const SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: CircleAvatar(child: Icon(Icons.event)),
+                    // Image
+                    if (occ.item.imagePath != null)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Image.file(
+                            File(occ.item.imagePath!),
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, e, st) => const Icon(
+                                Icons.image_not_supported,
+                                size: 24),
+                          ),
+                        ),
+                      )
+                    else
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primaryBlueLighter20,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.event, size: 20,
+                            color: AppColors.primaryBlueDarker10),
+                      ),
+                    const SizedBox(width: 12),
+                    // Title + time
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(occ.item.title,
+                              style:
+                                  Theme.of(context).textTheme.titleSmall),
+                          const SizedBox(height: 2),
+                          Text(timeStr,
+                              style:
+                                  Theme.of(context).textTheme.bodySmall),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-          title: Text(occ.item.title),
-          subtitle: Text(timeStr),
-          onTap: () => onTap(occ.item.id),
+              ),
+            ),
+          ),
         );
       },
     );

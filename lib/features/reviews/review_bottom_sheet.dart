@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
+import 'package:autism_avc_flutter/core/theme/app_colors.dart';
 import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class ReviewBottomSheet extends ConsumerStatefulWidget {
@@ -57,12 +58,12 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Theme.of(context).colorScheme.primaryContainer
+                          ? AppColors.primaryBlueLighter20
                           : null,
                       shape: BoxShape.circle,
                       border: isSelected
                           ? Border.all(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: AppColors.primaryBlueBase,
                               width: 2,
                             )
                           : null,

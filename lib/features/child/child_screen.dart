@@ -9,15 +9,16 @@ import 'package:intl/intl.dart';
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
+import 'package:autism_avc_flutter/core/theme/app_colors.dart';
 import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
-// ── Rails colour palette ──────────────────────────────────────────────────────
-const _kPrimaryBlueDarker = Color(0xFF4B477C); // $primaryblue-darker-10
-const _kPrimaryBlueLighter20 = Color(0xFFE1DFFF); // today header
-const _kPageBg = Color(0xFFF8F8F8); // $background
-const _kNeutralLighter20 = Color(0xFFEFEFEF); // emoji pill bg
-const _kNeutralLighter10 = Color(0xFFDFDFDF); // image border
-const _kPink = Color(0xFFFF8EBE); // highlight glow
+// ── Design tokens (via AppColors) ─────────────────────────────────────────────
+const _kPrimaryBlueDarker = AppColors.primaryBlueDarker10;
+const _kPrimaryBlueLighter20 = AppColors.primaryBlueLighter20;
+const _kPageBg = AppColors.neutralGrayLighter30;
+const _kNeutralLighter20 = AppColors.neutralGrayLighter20;
+const _kNeutralLighter10 = AppColors.neutralGrayLighter10;
+const _kPink = AppColors.highlightPink;
 
 // Rating emojis matching Rails 1–4 scale
 const _kEmojis = ['😢', '😐', '🙂', '😄'];
