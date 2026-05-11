@@ -50,6 +50,9 @@ dependencies:
   # Localization
   intl: any
 
+  # URL launcher
+  url_launcher: ^6.3.1
+
   # Utilities
   path: ^1.9.1
   uuid: ^4.5.1
