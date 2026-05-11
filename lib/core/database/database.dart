@@ -106,6 +106,8 @@ class AppDatabase extends _$AppDatabase {
   Future<int> insertReview(ReviewsCompanion entry) =>
       into(reviews).insert(entry);
 
+  Stream<List<Review>> watchAllReviews() => select(reviews).watch();
+
   // ── ItemException queries ───────────────────────────────────────────────
 
   Future<List<ItemException>> getExceptionsForItem(int itemId) =>

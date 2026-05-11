@@ -5,6 +5,7 @@ import 'package:autism_avc_flutter/features/calendar/calendar_screen.dart';
 import 'package:autism_avc_flutter/features/dashboard/dashboard_screen.dart';
 import 'package:autism_avc_flutter/features/items/item_detail_screen.dart';
 import 'package:autism_avc_flutter/features/items/item_form_screen.dart';
+import 'package:autism_avc_flutter/features/child/child_screen.dart';
 import 'package:autism_avc_flutter/features/settings/settings_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -29,6 +30,10 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/settings',
           builder: (context, state) => const SettingsScreen(),
+        ),
+        GoRoute(
+          path: '/child',
+          builder: (context, state) => const ChildScreen(),
         ),
       ],
     ),
@@ -86,6 +91,10 @@ class AppShell extends StatelessWidget {
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
+          NavigationDestination(
+            icon: Icon(Icons.child_care),
+            label: 'Child',
+          ),
         ],
       ),
     );
@@ -95,6 +104,7 @@ class AppShell extends StatelessWidget {
     final location = GoRouterState.of(context).uri.path;
     if (location.startsWith('/calendar')) return 1;
     if (location.startsWith('/settings')) return 2;
+    if (location.startsWith('/child')) return 3;
     return 0;
   }
 
@@ -106,6 +116,8 @@ class AppShell extends StatelessWidget {
         context.go('/calendar');
       case 2:
         context.go('/settings');
+      case 3:
+        context.go('/child');
     }
   }
 }
