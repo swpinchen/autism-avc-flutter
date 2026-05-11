@@ -28,7 +28,7 @@ class TtsService {
 
   Future<void> stop() => _tts.stop();
 
-  Future<List<dynamic>> getVoices() => _tts.getVoices;
+  Future<dynamic> getVoices() => _tts.getVoices;
 
   void dispose() {
     _tts.stop();
