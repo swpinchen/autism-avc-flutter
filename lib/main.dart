@@ -8,6 +8,7 @@ import 'package:autism_avc_flutter/core/router/app_router.dart';
 import 'package:autism_avc_flutter/core/services/tts_service.dart';
 import 'package:autism_avc_flutter/core/theme/app_theme.dart';
 import 'package:autism_avc_flutter/features/onboarding/onboarding_screen.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,12 +62,18 @@ class _AutismAvcAppState extends ConsumerState<AutismAvcApp> {
 
   @override
   Widget build(BuildContext context) {
+    final language = ref.watch(languageProvider);
+    final locale = Locale(language);
+
     if (_showOnboarding) {
       return MaterialApp(
         title: 'Autism AVC',
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: locale,
         home: OnboardingScreen(onComplete: _completeOnboarding),
       );
     }
@@ -77,6 +84,9 @@ class _AutismAvcAppState extends ConsumerState<AutismAvcApp> {
       darkTheme: AppTheme.dark,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: locale,
     );
   }
 }
