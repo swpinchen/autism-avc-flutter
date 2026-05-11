@@ -64,6 +64,26 @@ Three tables mirroring the Rails schema:
 - **Single-occurrence edit**: Same split pattern as `ItemsController#update_recurring` — create an ItemException for that date + duplicate as a non-recurring item.
 - **MakeSentence (happy message)**: `AppDatabase.getNextHappyItem()` finds the next upcoming item with rating ≥ 3, used in ReviewBottomSheet when rating == 1.
 - **Profanity filter**: `ProfanityFilterService` loads `assets/blacklist.txt` and validates title/details before save, matching `Item#profanity`.
+- **Recurring rule display**: `RecurrenceService.describeRule()` converts raw RRULE strings into locale-aware natural language (e.g. `RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR` → "Every week on Mon, Wed, Fri" / "毎週 月・水・金"). Supports DAILY/WEEKLY/MONTHLY frequencies, INTERVAL, BYDAY, BYMONTHDAY, and UNTIL. Used in both `ItemDetailScreen` and `ItemFormScreen`.
+
+### Child View Encouragement Flow
+When a child gives a low rating (1 or 2) to an event in the Child view, the app encourages them by:
+1. Looking up the closest future event (relative to the sad event's date) that has a positive review (rating ≥ 3). The search uses `AppDatabase.getNextHappyItem(after:)` and is **not** limited to the current week.
+2. Speaking a TTS encouragement message: *"Thank you for telling me how you feel. Just remember you have this to look forward to on {day}, {date}!"* (localized into Japanese as *"気持ちを教えてくれてありがとう。{day}の{date}に楽しみなことがあるよ！"*).
+3. Navigating to the happy event's detail page.
+4. Displaying the encouragement message in a styled banner at the top of the page.
+5. Playing a shooting fireworks animation (`FireworksOverlay`) over the page for 5 seconds.
+
+This also triggers when the user **re-rates** a previously happy event (≥ 3) to sad (≤ 2) from the detail page, provided the detail page was opened from the child view. The `childView=true` query parameter propagates through navigations so the behaviour carries across chained encouragement pages.
+
+**Key files:**
+- `lib/features/items/fireworks_overlay.dart` — Custom `CustomPainter`-based fireworks animation (7 staggered rockets, app colour palette).
+- `lib/features/child/child_screen.dart` — `_encourageWithHappyItem()` handles first-time low ratings.
+- `lib/features/items/item_detail_screen.dart` — `_triggerEncouragement()` handles happy→sad re-ratings; encouragement banner displayed when `showFireworks` is true.
+- `lib/core/router/app_router.dart` — Passes `fireworks` and `childView` query parameters to `ItemDetailScreen`.
+- `lib/l10n/app_en.arb`, `lib/l10n/app_ja.arb` — `encourageMessage` localised string with `{day}` and `{date}` placeholders.
+- `test/features/fireworks_overlay_test.dart` — Widget tests for the fireworks overlay.
+- `test/database/happy_item_test.dart` — Database integration tests for `getNextHappyItem()` including the `after` parameter.
 
 ### Environment Variables
 The `.env` file (not committed) must contain:
