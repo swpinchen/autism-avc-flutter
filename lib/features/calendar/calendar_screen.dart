@@ -116,15 +116,22 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                             leading: occ.item.imagePath != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(6),
-                                    child: Image.file(
-                                      File(occ.item.imagePath!),
+                                    child: SizedBox(
                                       width: 40,
                                       height: 40,
-                                      fit: BoxFit.cover,
+                                      child: Image.file(
+                                        File(occ.item.imagePath!),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   )
-                                : const CircleAvatar(
-                                    child: Icon(Icons.event)),
+                                : const SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: CircleAvatar(
+                                      child: Icon(Icons.event),
+                                    ),
+                                  ),
                             title: Text(occ.item.title),
                             subtitle: Text(timeStr),
                             onTap: () =>
