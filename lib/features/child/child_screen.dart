@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
+import 'package:autism_avc_flutter/core/services/tts_service.dart';
 import 'package:autism_avc_flutter/core/theme/app_colors.dart';
 import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
@@ -116,13 +117,25 @@ class ChildScreen extends ConsumerWidget {
                         lastReviewMap: lastReviewMap,
                         onTtsSpeakDay: () => ttsService.speak(label),
                         onTtsSpeakDetails: (d) => ttsService.speak(d),
-                        onNavigate: (id) => context.push('/items/$id'),
+                        onNavigate: (id) =>
+                            context.push('/items/$id?childView=true'),
                         onRate: (itemId, rating) async {
                           final db = ref.read(databaseProvider);
                           await db.insertReview(ReviewsCompanion.insert(
                             itemId: itemId, rating: rating,
                             date: DateTime.now(),
                           ));
+
+                          // Low rating → encourage with the next happy event
+                          if (rating <= 2 && context.mounted) {
+                            await _encourageWithHappyItem(
+                              context: context,
+                              db: db,
+                              tts: ttsService,
+                              l10n: l10n,
+                              sadItemId: itemId,
+                            );
+                          }
                         },
                       );
                     }).toList(),
@@ -135,9 +148,32 @@ class ChildScreen extends ConsumerWidget {
       ),
     );
   }
+  /// Look up the nearest future event with a positive review and, if found,
+  /// speak an encouragement message then navigate to its detail page with
+  /// a fireworks animation.
+  static Future<void> _encourageWithHappyItem({
+    required BuildContext context,
+    required AppDatabase db,
+    required TtsService tts,
+    required AppLocalizations l10n,
+    required int sadItemId,
+  }) async {
+    final sadItem = await db.getItem(sadItemId);
+    final happyItem = await db.getNextHappyItem(after: sadItem.startDate);
+    if (happyItem == null || !context.mounted) return;
+
+    final locale = l10n.localeName;
+    final day = DateFormat.EEEE(locale).format(happyItem.startDate);
+    final date = DateFormat.MMMd(locale).format(happyItem.startDate);
+    final message = l10n.encourageMessage(day, date);
+
+    // Start speech (don't await – continues while the page transitions)
+    tts.speak(message);
+    context.push('/items/${happyItem.id}?fireworks=true&childView=true');
+  }
 }
 
-// ── Day column (<th> header + <td> content) ───────────────────────────────────
+// ── Day column (<th> header + <td> content) ─────────────────────────────
 
 class _DayColumn extends StatelessWidget {
   final String label;

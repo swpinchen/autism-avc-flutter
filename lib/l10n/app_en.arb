@@ -108,5 +108,13 @@
   "day": "Day",
   "allDay": "All day",
   "noTime": "No time set",
-  "goBack": "Go back"
+  "goBack": "Go back",
+
+  "encourageMessage": "Thank you for telling me how you feel. Just remember you have this to look forward to on {day}, {date}!",
+  "@encourageMessage": {
+    "placeholders": {
+      "day": { "type": "String" },
+      "date": { "type": "String" }
+    }
+  }
 }

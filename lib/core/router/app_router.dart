@@ -53,7 +53,14 @@ final appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
-        return ItemDetailScreen(itemId: id);
+        final showFireworks =
+            state.uri.queryParameters['fireworks'] == 'true';
+        final isChildView =
+            state.uri.queryParameters['childView'] == 'true';
+        return ItemDetailScreen(
+            itemId: id,
+            showFireworks: showFireworks,
+            isChildView: isChildView);
       },
     ),
     GoRoute(

@@ -125,10 +125,13 @@ class AppDatabase extends _$AppDatabase {
   // ── Happy item query (MakeSentence) ─────────────────────────────────────
 
   /// Find the next upcoming item that has a review rating >= 3.
-  Future<Item?> getNextHappyItem() async {
-    final now = DateTime.now();
+  ///
+  /// When [after] is provided the search starts from that date instead of now,
+  /// so the result is the closest happy event *after* the given date.
+  Future<Item?> getNextHappyItem({DateTime? after}) async {
+    final reference = after ?? DateTime.now();
     final upcomingItems = await (select(items)
-          ..where((t) => t.startDate.isBiggerThanValue(now))
+          ..where((t) => t.startDate.isBiggerThanValue(reference))
           ..orderBy([(t) => OrderingTerm.asc(t.startDate)]))
         .get();
 

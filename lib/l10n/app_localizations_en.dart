@@ -284,4 +284,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goBack => 'Go back';
+
+  @override
+  String encourageMessage(String day, String date) {
+    return 'Thank you for telling me how you feel. Just remember you have this to look forward to on $day, $date!';
+  }
 }

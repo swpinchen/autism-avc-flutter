@@ -10,7 +10,10 @@ import 'package:intl/intl.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
+import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
+import 'package:autism_avc_flutter/core/services/tts_service.dart';
 import 'package:autism_avc_flutter/core/theme/app_colors.dart';
+import 'package:autism_avc_flutter/features/items/fireworks_overlay.dart';
 import 'package:autism_avc_flutter/features/items/recurring_edit_dialog.dart';
 import 'package:autism_avc_flutter/features/reviews/review_bottom_sheet.dart';
 import 'package:autism_avc_flutter/l10n/app_localizations.dart';
@@ -20,8 +23,15 @@ const _kRatingEmojis = ['😢', '😐', '🙂', '😄'];
 
 class ItemDetailScreen extends ConsumerStatefulWidget {
   final int itemId;
+  final bool showFireworks;
+  final bool isChildView;
 
-  const ItemDetailScreen({super.key, required this.itemId});
+  const ItemDetailScreen({
+    super.key,
+    required this.itemId,
+    this.showFireworks = false,
+    this.isChildView = false,
+  });
 
   @override
   ConsumerState<ItemDetailScreen> createState() => _ItemDetailScreenState();
@@ -44,7 +54,6 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
     super.initState();
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 3));
-    _confettiController.play();
     _loadLastReview();
   }
 
@@ -52,6 +61,26 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
     final db = ref.read(databaseProvider);
     final review = await db.getLastReviewForItem(widget.itemId);
     if (mounted) setState(() => _lastReview = review);
+  }
+
+  /// Navigate to the closest future happy event with fireworks after a
+  /// happy → sad re-rating in child view.
+  Future<void> _triggerEncouragement(
+    DateTime sadEventDate,
+    AppDatabase db,
+    TtsService ttsService,
+    AppLocalizations l10n,
+  ) async {
+    final happyItem = await db.getNextHappyItem(after: sadEventDate);
+    if (happyItem == null || !mounted) return;
+
+    final locale = l10n.localeName;
+    final day = DateFormat.EEEE(locale).format(happyItem.startDate);
+    final date = DateFormat.MMMd(locale).format(happyItem.startDate);
+    ttsService.speak(l10n.encourageMessage(day, date));
+    if (context.mounted) {
+      context.push('/items/${happyItem.id}?fireworks=true&childView=true');
+    }
   }
 
   @override
@@ -158,12 +187,50 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
                 ),
               ),
 
+              // ── Fireworks layer (child-view encouragement) ─────
+              if (widget.showFireworks) const FireworksOverlay(),
+
               // ── Content ──────────────────────────────────────────
               SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     const SizedBox(height: 16),
+
+                    // Encouragement message banner
+                    if (widget.showFireworks) ...[
+                      FractionallySizedBox(
+                        widthFactor: 0.9,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryBlueLighter30,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: AppColors.primaryBlueLighter10,
+                            ),
+                          ),
+                          child: Text(
+                            l10n.encourageMessage(
+                              DateFormat.EEEE(l10n.localeName)
+                                  .format(item.startDate),
+                              DateFormat.MMMd(l10n.localeName)
+                                  .format(item.startDate),
+                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  color: AppColors.primaryBlueDarker10,
+                                  height: 1.4,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
 
                     // Centered image
                     if (item.imagePath != null)
@@ -263,9 +330,12 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
                           const Icon(Icons.repeat, size: 18,
                               color: AppColors.primaryBlueBase),
                           const SizedBox(width: 8),
-                          Text(
-                            '${l10n.recurringLabel}: ${item.recurringRule}',
-                            style: Theme.of(context).textTheme.bodySmall,
+                          Flexible(
+                            child: Text(
+                              '${l10n.recurringLabel}: ${RecurrenceService.describeRule(item.recurringRule!, l10n.localeName)}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
@@ -296,12 +366,26 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
                         ),
                         const SizedBox(width: 12),
                         OutlinedButton.icon(
-                          onPressed: () {
-                            showModalBottomSheet(
+                          onPressed: () async {
+                            final prevRating = _lastReview?.rating;
+                            await showModalBottomSheet(
                               context: context,
                               builder: (_) =>
                                   ReviewBottomSheet(itemId: item.id),
-                            ).then((_) => _loadLastReview());
+                            );
+                            await _loadLastReview();
+
+                            // Child-view: happy → sad re-rating triggers
+                            // encouragement with the next happy event.
+                            if (widget.isChildView &&
+                                prevRating != null &&
+                                prevRating >= 3 &&
+                                _lastReview != null &&
+                                _lastReview!.rating <= 2 &&
+                                context.mounted) {
+                              await _triggerEncouragement(
+                                  item.startDate, db, ttsService, l10n);
+                            }
                           },
                           icon: const Icon(Icons.star, size: 20),
                           label: Text(l10n.review),

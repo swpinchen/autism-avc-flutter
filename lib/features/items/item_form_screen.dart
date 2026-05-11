@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
+import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
 import 'package:autism_avc_flutter/features/items/recurring_rule_picker.dart';
 import 'package:autism_avc_flutter/features/items/unsplash_picker_screen.dart';
 import 'package:autism_avc_flutter/l10n/app_localizations.dart';
@@ -127,7 +128,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             ListTile(
               leading: const Icon(Icons.repeat),
               title: Text(l10n.repeat),
-              subtitle: Text(_recurringRule ?? l10n.none),
+              subtitle: Text(_recurringRule != null
+                  ? RecurrenceService.describeRule(
+                      _recurringRule!, l10n.localeName)
+                  : l10n.none),
               onTap: () async {
                 final rule = await showModalBottomSheet<String?>(
                   context: context,
