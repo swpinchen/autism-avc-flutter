@@ -7,6 +7,7 @@ import 'package:autism_avc_flutter/features/items/item_detail_screen.dart';
 import 'package:autism_avc_flutter/features/items/item_form_screen.dart';
 import 'package:autism_avc_flutter/features/child/child_screen.dart';
 import 'package:autism_avc_flutter/features/settings/settings_screen.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -73,27 +74,28 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: child,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex(context),
         onDestinationSelected: (index) => _onTap(context, index),
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Today',
+            icon: const Icon(Icons.home),
+            label: l10n.today,
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
+            icon: const Icon(Icons.calendar_month),
+            label: l10n.calendar,
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings),
+            label: l10n.settings,
           ),
           NavigationDestination(
-            icon: Icon(Icons.child_care),
-            label: 'Child',
+            icon: const Icon(Icons.child_care),
+            label: l10n.child,
           ),
         ],
       ),

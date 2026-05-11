@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -18,8 +19,10 @@ class DashboardScreen extends ConsumerWidget {
     final recurrenceService = ref.watch(recurrenceServiceProvider);
     final ttsService = ref.watch(ttsServiceProvider);
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Today')),
+      appBar: AppBar(title: Text(l10n.today)),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/items/new'),
         child: const Icon(Icons.add),
@@ -42,9 +45,9 @@ class DashboardScreen extends ConsumerWidget {
           );
 
           if (occurrences.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                'No events today.\nTap + to add one!',
+                l10n.noEventsToday,
                 textAlign: TextAlign.center,
               ),
             );
@@ -82,7 +85,8 @@ class _ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final item = occurrence.item;
-    final timeStr = DateFormat.jm().format(occurrence.occurrenceStart);
+    final locale = AppLocalizations.of(context)!.localeName;
+    final timeStr = DateFormat.jm(locale).format(occurrence.occurrenceStart);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -146,7 +150,7 @@ class _ItemCard extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.volume_up),
                 onPressed: onPlayTts,
-                tooltip: 'Read aloud',
+                tooltip: AppLocalizations.of(context)!.readAloud,
               ),
             ],
           ),

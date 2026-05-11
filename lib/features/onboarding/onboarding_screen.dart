@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -13,36 +14,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _pageController = PageController();
   int _currentPage = 0;
 
-  static const _pages = [
+  static const _pageIcons = [
+    Icons.calendar_month,
+    Icons.repeat,
+    Icons.volume_up,
+    Icons.star,
+    Icons.image_search,
+  ];
+
+  List<_OnboardingPage> _pages(AppLocalizations l10n) => [
     _OnboardingPage(
-      icon: Icons.calendar_month,
-      title: 'Plan Your Day',
-      description:
-          'Create events and tasks on your calendar. See what\'s coming up today and this week.',
+      icon: _pageIcons[0],
+      title: l10n.onboardingPlanTitle,
+      description: l10n.onboardingPlanDesc,
     ),
     _OnboardingPage(
-      icon: Icons.repeat,
-      title: 'Recurring Events',
-      description:
-          'Set events to repeat daily, weekly, or monthly. Never forget your routine.',
+      icon: _pageIcons[1],
+      title: l10n.onboardingRecurringTitle,
+      description: l10n.onboardingRecurringDesc,
     ),
     _OnboardingPage(
-      icon: Icons.volume_up,
-      title: 'Read Aloud',
-      description:
-          'Tap the speaker button to hear event details read aloud. Works in English and Japanese.',
+      icon: _pageIcons[2],
+      title: l10n.onboardingTtsTitle,
+      description: l10n.onboardingTtsDesc,
     ),
     _OnboardingPage(
-      icon: Icons.star,
-      title: 'Review How You Feel',
-      description:
-          'After an event, rate how it went. If you\'re feeling down, we\'ll remind you of something to look forward to.',
+      icon: _pageIcons[3],
+      title: l10n.onboardingReviewTitle,
+      description: l10n.onboardingReviewDesc,
     ),
     _OnboardingPage(
-      icon: Icons.image_search,
-      title: 'Add Photos',
-      description:
-          'Attach photos from your camera, gallery, or search Unsplash for the perfect image.',
+      icon: _pageIcons[4],
+      title: l10n.onboardingPhotoTitle,
+      description: l10n.onboardingPhotoDesc,
     ),
   ];
 
@@ -54,7 +58,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isLast = _currentPage == _pages.length - 1;
+    final l10n = AppLocalizations.of(context)!;
+    final pages = _pages(l10n);
+    final isLast = _currentPage == pages.length - 1;
 
     return Scaffold(
       body: SafeArea(
@@ -65,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               alignment: Alignment.topRight,
               child: TextButton(
                 onPressed: widget.onComplete,
-                child: const Text('Skip'),
+                child: Text(l10n.skip),
               ),
             ),
 
@@ -73,10 +79,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
-                itemCount: _pages.length,
+                itemCount: pages.length,
                 onPageChanged: (i) => setState(() => _currentPage = i),
                 itemBuilder: (context, index) {
-                  final page = _pages[index];
+                  final page = pages[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 32),
                     child: Column(
@@ -109,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             // Dots indicator
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(_pages.length, (i) {
+              children: List.generate(pages.length, (i) {
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   width: _currentPage == i ? 24 : 8,
@@ -145,7 +151,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 48),
                 ),
-                child: Text(isLast ? 'Get Started' : 'Next'),
+                child: Text(isLast ? l10n.getStarted : l10n.next),
               ),
             ),
             const SizedBox(height: 32),

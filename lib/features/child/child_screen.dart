@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 // ── Rails colour palette ──────────────────────────────────────────────────────
 const _kPrimaryBlueDarker = Color(0xFF4B477C); // $primaryblue-darker-10
@@ -42,10 +43,12 @@ class ChildScreen extends ConsumerWidget {
     final tomorrow = today.add(const Duration(days: 1));
     final days = List.generate(7, (i) => today.add(Duration(days: i)));
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: _kPageBg,
       appBar: AppBar(
-        title: const Text('This Week'),
+        title: Text(l10n.thisWeek),
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         elevation: 1,
@@ -99,10 +102,10 @@ class ChildScreen extends ConsumerWidget {
                       final isToday = day == today;
                       final isTomorrow = day == tomorrow;
                       final label = isToday
-                          ? 'Today'
+                          ? l10n.today
                           : isTomorrow
-                              ? 'Tomorrow'
-                              : DateFormat.EEEE().format(day);
+                              ? l10n.tomorrow
+                              : DateFormat.EEEE(l10n.localeName).format(day);
                       final dayOccs = occsByDay[day] ?? [];
 
                       return _DayColumn(

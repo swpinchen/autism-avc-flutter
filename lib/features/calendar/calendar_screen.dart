@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/recurrence_service.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class CalendarScreen extends ConsumerStatefulWidget {
   const CalendarScreen({super.key});
@@ -26,8 +27,10 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
     final exceptionsAsync = ref.watch(allExceptionsProvider);
     final recurrenceService = ref.watch(recurrenceServiceProvider);
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Calendar')),
+      appBar: AppBar(title: Text(l10n.calendar)),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final date = _selectedDay ?? _focusedDay;
@@ -105,12 +108,12 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               const Divider(height: 1),
               Expanded(
                 child: selectedEvents.isEmpty
-                    ? const Center(child: Text('No events on this day'))
+                    ? Center(child: Text(l10n.noEventsOnDay))
                     : ListView.builder(
                         itemCount: selectedEvents.length,
                         itemBuilder: (context, index) {
                           final occ = selectedEvents[index];
-                          final timeStr = DateFormat.jm()
+                          final timeStr = DateFormat.jm(l10n.localeName)
                               .format(occ.occurrenceStart);
                           return ListTile(
                             leading: occ.item.imagePath != null

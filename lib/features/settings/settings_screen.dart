@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:autism_avc_flutter/core/providers/providers.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -14,14 +15,16 @@ class SettingsScreen extends ConsumerWidget {
     final prefs = ref.watch(sharedPreferencesProvider);
     final ttsService = ref.watch(ttsServiceProvider);
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: ListView(
         children: [
           // Language
           ListTile(
             leading: const Icon(Icons.language),
-            title: const Text('Language'),
+            title: Text(l10n.language),
             subtitle: Text(language == 'ja' ? '日本語' : 'English'),
             trailing: Switch(
               value: language == 'ja',
@@ -38,7 +41,7 @@ class SettingsScreen extends ConsumerWidget {
           // Timezone
           ListTile(
             leading: const Icon(Icons.schedule),
-            title: const Text('Timezone'),
+            title: Text(l10n.timezone),
             subtitle: Text(ref.watch(timeZoneProvider)),
             onTap: () async {
               final timezones = [
@@ -63,7 +66,7 @@ class SettingsScreen extends ConsumerWidget {
               final picked = await showDialog<String>(
                 context: context,
                 builder: (ctx) => SimpleDialog(
-                  title: const Text('Select Timezone'),
+                  title: Text(l10n.selectTimezone),
                   children: timezones.map((tz) {
                     return SimpleDialogOption(
                       onPressed: () => Navigator.pop(ctx, tz),
@@ -90,7 +93,7 @@ class SettingsScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: Text(
-              'Text-to-Speech',
+              l10n.textToSpeech,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
@@ -98,7 +101,7 @@ class SettingsScreen extends ConsumerWidget {
           // Pitch
           ListTile(
             leading: const Icon(Icons.tune),
-            title: const Text('Pitch'),
+            title: Text(l10n.pitch),
             subtitle: Slider(
               value: pitch,
               min: 0.5,
@@ -116,7 +119,7 @@ class SettingsScreen extends ConsumerWidget {
           // Rate
           ListTile(
             leading: const Icon(Icons.speed),
-            title: const Text('Speed'),
+            title: Text(l10n.speed),
             subtitle: Slider(
               value: rate,
               min: 0.1,
@@ -136,13 +139,10 @@ class SettingsScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: OutlinedButton.icon(
               onPressed: () {
-                final text = language == 'ja'
-                    ? 'これは音声のプレビューです'
-                    : 'This is a voice preview';
-                ttsService.speak(text);
+                ttsService.speak(l10n.voicePreviewText);
               },
               icon: const Icon(Icons.play_arrow),
-              label: const Text('Preview Voice'),
+              label: Text(l10n.previewVoice),
             ),
           ),
           const SizedBox(height: 32),

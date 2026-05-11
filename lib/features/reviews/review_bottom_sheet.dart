@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class ReviewBottomSheet extends ConsumerStatefulWidget {
   final int itemId;
@@ -20,22 +21,26 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
 
   // Emoji labels matching the Rails 1–4 scale
   static const _ratingEmojis = ['😢', '😐', '🙂', '😄'];
-  static const _ratingLabels = ['Sad', 'Okay', 'Good', 'Great'];
+
+  List<String> _ratingLabels(AppLocalizations l10n) =>
+      [l10n.ratingSad, l10n.ratingOkay, l10n.ratingGood, l10n.ratingGreat];
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(24),
-      child: _submitted ? _buildResult() : _buildRatingPicker(),
+      child: _submitted ? _buildResult(l10n) : _buildRatingPicker(l10n),
     );
   }
 
-  Widget _buildRatingPicker() {
+  Widget _buildRatingPicker(AppLocalizations l10n) {
+    final labels = _ratingLabels(l10n);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'How do you feel about this?',
+          l10n.howDoYouFeel,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 24),
@@ -69,7 +74,7 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _ratingLabels[index],
+                    labels[index],
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ],
@@ -80,13 +85,13 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
         const SizedBox(height: 24),
         FilledButton(
           onPressed: _selectedRating != null ? _submit : null,
-          child: const Text('Submit'),
+          child: Text(l10n.submit),
         ),
       ],
     );
   }
 
-  Widget _buildResult() {
+  Widget _buildResult(AppLocalizations l10n) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -96,7 +101,7 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
         ),
         const SizedBox(height: 12),
         Text(
-          'Thank you!',
+          l10n.thankYou,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         if (_happyMessage != null) ...[
@@ -110,7 +115,7 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
         const SizedBox(height: 24),
         FilledButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Done'),
+          child: Text(l10n.done),
         ),
       ],
     );
@@ -118,7 +123,6 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
 
   Future<void> _submit() async {
     final db = ref.read(databaseProvider);
-    final language = ref.read(languageProvider);
 
     // Save the review
     await db.insertReview(ReviewsCompanion.insert(
@@ -131,10 +135,9 @@ class _ReviewBottomSheetState extends ConsumerState<ReviewBottomSheet> {
     String? happy;
     if (_selectedRating == 1) {
       final happyItem = await db.getNextHappyItem();
-      if (happyItem != null) {
-        happy = language == 'ja'
-            ? '教えてくれてありがとう！その気持ちわかるよ。でも大丈夫！ もうすぐ${happyItem.details}'
-            : 'Thank you for telling me how you feel. Just remember you get to ${happyItem.details}';
+      if (happyItem != null && mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        happy = l10n.happyMessage(happyItem.details);
       }
     }
 

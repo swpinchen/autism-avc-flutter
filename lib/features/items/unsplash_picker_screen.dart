@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/core/services/unsplash_service.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 /// Full-screen picker that searches Unsplash and returns the local file path
 /// of the downloaded+saved image, or null if cancelled.
@@ -41,7 +42,9 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
     setState(() {
       _results = results;
       _loading = false;
-      if (results.isEmpty) _error = 'No results found';
+      if (results.isEmpty && mounted) {
+        _error = AppLocalizations.of(context)!.noResults;
+      }
     });
   }
 
@@ -56,7 +59,7 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
     if (bytes == null) {
       setState(() {
         _loading = false;
-        _error = 'Failed to download image';
+        if (mounted) _error = AppLocalizations.of(context)!.downloadFailed;
       });
       return;
     }
@@ -76,8 +79,9 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Search Unsplash')),
+      appBar: AppBar(title: Text(l10n.searchUnsplash)),
       body: Column(
         children: [
           // Search bar
@@ -86,7 +90,7 @@ class _UnsplashPickerScreenState extends ConsumerState<UnsplashPickerScreen> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search photos...',
+                hintText: l10n.searchPhotosHint,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),

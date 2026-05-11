@@ -10,6 +10,7 @@ import 'package:autism_avc_flutter/core/database/database.dart';
 import 'package:autism_avc_flutter/core/providers/providers.dart';
 import 'package:autism_avc_flutter/features/items/recurring_edit_dialog.dart';
 import 'package:autism_avc_flutter/features/reviews/review_bottom_sheet.dart';
+import 'package:autism_avc_flutter/l10n/app_localizations.dart';
 
 class ItemDetailScreen extends ConsumerWidget {
   final int itemId;
@@ -31,6 +32,7 @@ class ItemDetailScreen extends ConsumerWidget {
         }
 
         final item = snapshot.data!;
+        final l10n = AppLocalizations.of(context)!;
 
         return Scaffold(
           appBar: AppBar(
@@ -75,17 +77,16 @@ class ItemDetailScreen extends ConsumerWidget {
                   final confirmed = await showDialog<bool>(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: const Text('Delete Event'),
-                      content: const Text(
-                          'Are you sure you want to delete this event?'),
+                      title: Text(l10n.deleteEvent),
+                      content: Text(l10n.deleteConfirm),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(ctx, false),
-                          child: const Text('Cancel'),
+                          child: Text(l10n.cancel),
                         ),
                         TextButton(
                           onPressed: () => Navigator.pop(ctx, true),
-                          child: const Text('Delete'),
+                          child: Text(l10n.delete),
                         ),
                       ],
                     ),
@@ -131,7 +132,7 @@ class ItemDetailScreen extends ConsumerWidget {
                     const Icon(Icons.schedule, size: 18),
                     const SizedBox(width: 8),
                     Text(
-                      DateFormat.yMMMd().add_jm().format(item.startDate),
+                      DateFormat.yMMMd(l10n.localeName).add_jm().format(item.startDate),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
@@ -142,7 +143,7 @@ class ItemDetailScreen extends ConsumerWidget {
                     children: [
                       const SizedBox(width: 26),
                       Text(
-                        'to ${DateFormat.jm().format(item.endDate!)}',
+                        'to ${DateFormat.jm(l10n.localeName).format(item.endDate!)}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -155,7 +156,7 @@ class ItemDetailScreen extends ConsumerWidget {
                       const Icon(Icons.repeat, size: 18),
                       const SizedBox(width: 8),
                       Text(
-                        'Recurring: ${item.recurringRule}',
+                        '${l10n.recurringLabel}: ${item.recurringRule}',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -174,7 +175,7 @@ class ItemDetailScreen extends ConsumerWidget {
                 FilledButton.icon(
                   onPressed: () => ttsService.speak(item.details),
                   icon: const Icon(Icons.volume_up),
-                  label: const Text('Read Aloud'),
+                  label: Text(l10n.readAloud),
                 ),
                 const SizedBox(height: 12),
 
@@ -187,7 +188,7 @@ class ItemDetailScreen extends ConsumerWidget {
                     );
                   },
                   icon: const Icon(Icons.star),
-                  label: const Text('Review'),
+                  label: Text(l10n.review),
                 ),
               ],
             ),
