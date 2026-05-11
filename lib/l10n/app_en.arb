@@ -107,5 +107,6 @@
   "week": "Week",
   "day": "Day",
   "allDay": "All day",
-  "noTime": "No time set"
+  "noTime": "No time set",
+  "goBack": "Go back"
 }

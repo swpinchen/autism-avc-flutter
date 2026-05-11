@@ -281,4 +281,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noTime => 'No time set';
+
+  @override
+  String get goBack => 'Go back';
 }

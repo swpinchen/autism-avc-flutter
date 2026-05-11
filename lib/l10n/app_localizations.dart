@@ -625,6 +625,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No time set'**
   String get noTime;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get goBack;
 }
 
 class _AppLocalizationsDelegate

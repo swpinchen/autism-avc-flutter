@@ -107,5 +107,6 @@
   "week": "週",
   "day": "日",
   "allDay": "終日",
-  "noTime": "時間未設定"
+  "noTime": "時間未設定",
+  "goBack": "戻る"
 }

@@ -276,4 +276,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noTime => '時間未設定';
+
+  @override
+  String get goBack => '戻る';
 }
